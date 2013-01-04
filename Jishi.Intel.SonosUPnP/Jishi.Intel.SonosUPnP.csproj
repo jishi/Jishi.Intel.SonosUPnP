@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\packages\Machine.Specifications.0.4.24.0\lib\Machine.Specifications.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,11 +41,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="UPnP, Version=1.0.4561.18411, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\UPnP.dll</HintPath>
+      <HintPath>..\lib\UPnP.dll</HintPath>
     </Reference>
     <Reference Include="UPNP_AV, Version=1.0.4561.18412, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\UPNP_AV.dll</HintPath>
+      <HintPath>..\lib\UPNP_AV.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +58,6 @@
     <Compile Include="SonosPlayer.cs" />
     <Compile Include="SonosTrack.cs" />
     <Compile Include="SonosZone.cs" />
-    <Compile Include="Tests\DiscoveryTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
