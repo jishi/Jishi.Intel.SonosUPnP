@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Jishi.Intel.SonosUPnP
@@ -9,22 +10,33 @@ namespace Jishi.Intel.SonosUPnP
 		public string Artist { get; set; }
 		public string Album { get; set; }
 
-		public static SonosDIDL Parse(string xml)
+		public static IList<SonosDIDL> Parse( string xml )
+		{
+			var didl = XElement.Parse( xml );
+			return Parse( didl );
+		}
+
+		public static IList<SonosDIDL> Parse( XElement didl )
 		{
 			XNamespace ns = "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/";
 			XNamespace dc = "http://purl.org/dc/elements/1.1/";
 			XNamespace upnp = "urn:schemas-upnp-org:metadata-1-0/upnp/";
 			XNamespace r = "urn:schemas-rinconnetworks-com:metadata-1-0/";
 
-			var didl = XElement.Parse(xml);
-			var item = didl.Element(ns + "item");
-			var response = new SonosDIDL();
+			var items = didl.Elements( ns + "item" );
 
-			response.AlbumArtURI = item.Element(upnp + "albumArtURI").Value;
-			response.Artist = item.Element(dc + "creator").Value;
-			response.Title = item.Element(dc + "title").Value;
+			var list = new List<SonosDIDL>();
 
-			return response;
+			foreach ( var item in items )
+			{
+				var response = new SonosDIDL();
+				response.AlbumArtURI = item.Element( upnp + "albumArtURI" ).Value;
+				response.Artist = item.Element( dc + "creator" ).Value;
+				response.Title = item.Element( dc + "title" ).Value;
+				list.Add( response );
+			}
+
+			return list;
 		}
 	}
 }
