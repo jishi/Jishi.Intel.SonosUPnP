@@ -51,7 +51,7 @@ namespace Jishi.Intel.SonosUPnP
 			}
 
 			// okay, we will try and notify the players that they have been found now.
-			var player = players.FirstOrDefault( p => p.UUID == device.UniqueDeviceName );
+			var player = players.FirstOrDefault(p => p.UUID == device.UniqueDeviceName);
 			if (player != null)
 			{
 				player.SetDevice(device);
@@ -100,7 +100,8 @@ namespace Jishi.Intel.SonosUPnP
 				}
 			}
 
-			TopologyChanged.Invoke();
+			if (TopologyChanged != null)
+				TopologyChanged.Invoke();
 		}
 
 		private void CreateZone(XElement zoneXml)
@@ -108,15 +109,15 @@ namespace Jishi.Intel.SonosUPnP
 			var players = zoneXml.Descendants("ZoneGroupMember").Where(x => x.Attribute("Invisible") == null).ToList();
 			if (players.Count > 0)
 			{
-				var zone = new SonosZone(zoneXml.Attribute("Coordinator").Value);
+				var zone = new SonosZone((string) zoneXml.Attribute("Coordinator"));
 
 				foreach (var playerXml in players)
 				{
 					var player = new SonosPlayer
 						             {
-							             Name = playerXml.Attribute("ZoneName").Value,
-							             UUID = playerXml.Attribute("UUID").Value,
-										 ControlPoint = ControlPoint
+							             Name = (string) playerXml.Attribute("ZoneName"),
+							             UUID = (string) playerXml.Attribute("UUID"),
+							             ControlPoint = ControlPoint
 						             };
 
 					zone.AddPlayer(player);

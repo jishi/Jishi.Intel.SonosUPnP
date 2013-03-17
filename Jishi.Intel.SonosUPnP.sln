@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jishi.Intel.SonosUPnP", "Jishi.Intel.SonosUPnP\Jishi.Intel.SonosUPnP.csproj", "{9DE76BE9-A61B-4754-92DE-05B9FD2EEC5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{48E40C2A-93EE-4B14-A511-E5A8E9A68DC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{9DE76BE9-A61B-4754-92DE-05B9FD2EEC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE76BE9-A61B-4754-92DE-05B9FD2EEC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DE76BE9-A61B-4754-92DE-05B9FD2EEC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48E40C2A-93EE-4B14-A511-E5A8E9A68DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48E40C2A-93EE-4B14-A511-E5A8E9A68DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48E40C2A-93EE-4B14-A511-E5A8E9A68DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48E40C2A-93EE-4B14-A511-E5A8E9A68DC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
