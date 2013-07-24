@@ -119,4 +119,28 @@ namespace Tests
 		private static SonosZone zone;
 		private static IList<SonosItem> favorites;
 	}
+
+	public class get_artists : DiscoveryBase
+	{
+		Because of = () =>
+		{
+			zone = d.Zones.First();
+
+			result = zone.Coordinator.GetArtists(null, 0, 2);
+			
+			result2 = zone.Coordinator.GetArtists( null, 2, 2 );
+
+		};
+
+		It should_have_startIndex = () => { result.StartingIndex.ShouldEqual(0u); };
+		It should_have_result = () => { result.NumberReturned.ShouldBeGreaterThan( 0u ); };
+		It should_have_more_total = () => { result.TotalMatches.ShouldBeGreaterThan( 2 ); };
+		It should_have_startIndex2 = () => { result2.StartingIndex.ShouldEqual( 2u ); };
+		It should_have_result2 = () => { result2.NumberReturned.ShouldBeGreaterThan( 0u ); };
+		It should_have_more_total2 = () => { result2.TotalMatches.ShouldBeGreaterThan( 2 ); };
+
+		private static SonosZone zone;
+		private static SearchResult result;
+		private static SearchResult result2;
+	}
 }

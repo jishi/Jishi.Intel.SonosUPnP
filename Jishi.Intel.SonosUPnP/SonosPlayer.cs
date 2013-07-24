@@ -48,6 +48,8 @@ namespace Jishi.Intel.SonosUPnP
 		{
 			var xEvent = XElement.Parse(newState);
 			XNamespace ns = "urn:schemas-upnp-org:metadata-1-0/AVT/";
+			XNamespace r = "urn:schemas-rinconnetworks-com:metadata-1-0/";
+
 
 			var instance = xEvent.Element(ns + "InstanceID");
 
@@ -64,7 +66,8 @@ namespace Jishi.Intel.SonosUPnP
 					                       CurrentTrack = instance.Element(ns + "CurrentTrack").Attribute("val").Value,
 					                       CurrentTrackDuration =
 						                       ParseDuration(instance.Element(ns + "CurrentTrackDuration").Attribute("val").Value),
-					                       CurrentTrackMetaData = instance.Element(ns + "CurrentTrackMetaData").Attribute("val").Value
+					                       CurrentTrackMetaData = instance.Element(ns + "CurrentTrackMetaData").Attribute("val").Value,
+					                       NextTrackMetaData = instance.Element(r + "NextTrackMetaData").Attribute("val").Value
 				                       };
 
 			currentState = preliminaryState;
@@ -366,25 +369,34 @@ namespace Jishi.Intel.SonosUPnP
 
 		public IList<SonosItem> GetQueue()
 		{
-			var xml = Browse("Q:0");
-			return SonosItem.Parse(xml);
+			var searchResult = Browse("Q:0");
+			return SonosItem.Parse(searchResult.Result);
 		}
 
 		public virtual IList<SonosItem> GetFavorites()
 		{
-			var xml = Browse("FV:2");
-			var tracks = SonosItem.Parse(xml);
+			var searchResult = Browse("FV:2");
+			var tracks = SonosItem.Parse(searchResult.Result);
 			return tracks;
 		}
 
-		private string Browse(string action)
+		public virtual SearchResult GetArtists(string objectId = null, uint startIndex = 0, uint requestedCount = 100)
+		{
+			if (objectId == null)
+				objectId = "A:ARTIST";
+
+			var searchResult = Browse(objectId, startIndex, requestedCount);
+			return searchResult;
+		}
+
+		private SearchResult Browse(string action, uint startIndex = 0u, uint requestedCount = 100u)
 		{
 			var arguments = new UPnPArgument[10];
 			arguments[0] = new UPnPArgument("ObjectID", action);
 			arguments[1] = new UPnPArgument("BrowseFlag", "BrowseDirectChildren");
 			arguments[2] = new UPnPArgument("Filter", "");
-			arguments[3] = new UPnPArgument("StartingIndex", 0u);
-			arguments[4] = new UPnPArgument("RequestedCount", 0u);
+			arguments[3] = new UPnPArgument("StartingIndex", startIndex);
+			arguments[4] = new UPnPArgument("RequestedCount", requestedCount);
 			arguments[5] = new UPnPArgument("SortCriteria", "");
 			arguments[6] = new UPnPArgument("Result", "");
 			arguments[7] = new UPnPArgument("NumberReturned", 0u);
@@ -394,8 +406,22 @@ namespace Jishi.Intel.SonosUPnP
 			ContentDirectory.InvokeSync("Browse", arguments);
 
 			var result = arguments[6].DataValue as string;
-			return result;
+			return new SearchResult
+				       {
+					       Result = result,
+					       StartingIndex = startIndex,
+					       NumberReturned = (uint) arguments[7].DataValue,
+					       TotalMatches = (uint) arguments[8].DataValue
+				       };
 		}
+	}
+
+	public class SearchResult
+	{
+		public string Result { get; set; }
+		public uint StartingIndex { get; set; }
+		public uint NumberReturned { get; set; }
+		public uint TotalMatches { get; set; }
 	}
 
 	public class PlayerState
@@ -407,5 +433,6 @@ namespace Jishi.Intel.SonosUPnP
 		public string CurrentTrackMetaData { get; set; }
 		public DateTime LastStateChange { get; set; }
 		public TimeSpan RelTime { get; set; }
+		public string NextTrackMetaData { get; set; }
 	}
 }
