@@ -366,6 +366,26 @@ namespace Jishi.Intel.SonosUPnP
 			arguments[0] = new UPnPArgument("InstanceID", 0u);
 			AVTransport.InvokeAsync("Pause", arguments);
 		}
+		
+        public ushort GetVolume()
+        {
+            var arguments = new UPnPArgument[3];
+            arguments[0] = new UPnPArgument("InstanceID", 0u);
+            arguments[1] = new UPnPArgument("Channel", "Master");
+            arguments[2] = new UPnPArgument("CurrentVolume", 0u);
+            RenderingControl.InvokeSync("GetVolume", arguments);
+            return (ushort) arguments[2].DataValue;
+        }
+
+        public void SetVolume(ushort vol)
+        {
+            vol = Math.Min(Math.Max(vol, (ushort)0), (ushort)100);
+            var arguments = new UPnPArgument[3];
+            arguments[0] = new UPnPArgument("InstanceID", 0u);
+            arguments[1] = new UPnPArgument("Channel", "Master");
+            arguments[2] = new UPnPArgument("DesiredVolume", vol);
+            RenderingControl.InvokeAsync("SetVolume", arguments);
+        }
 
 		public IList<SonosItem> GetQueue()
 		{
